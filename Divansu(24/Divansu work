@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+
+def ordinal_encoding(data, column, categories):
+    new_column = []
+    for value in data[column]:
+        encoded_value = categories.index(value)
+        new_column.append(encoded_value)
+    data[column] = new_column
+    return data
+
+def one_hot_encoding(data, column):
+    unique_values = list(set(data[column]))
+    for value in unique_values:
+        new_column = []
+        for entry in data[column]:
+            if entry == value:
+                new_column.append(1)
+            else:
+                new_column.append(0)
+        data[value] = new_column
+    data = data.drop(column, axis=1)
+    return data
+
+data = pd.DataFrame({
+    'color': ['red', 'blue', 'green', 'blue', 'green', 'red'],
+    'size': ['S', 'M', 'L', 'M', 'S', 'L']
+})
+
+categories = ['S', 'M', 'L']
+data = ordinal_encoding(data, 'size', categories)
+data = one_hot_encoding(data, 'color')
+
+print(data)
